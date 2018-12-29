@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class Turing {
@@ -11,12 +8,29 @@ public class Turing {
     public static String   initState;
     public static String   blankSymbol;
     public static Set<String> finalSet = new HashSet<>();
-    public static final ArrayList<Transition> transitions = new ArrayList<Transition>();
+    public static ArrayList<Transition> transitions = new ArrayList<Transition>();
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         initParser("/Users/fengshiwei/001NJU/2018Fall/TheoryofComputation/Project-2018-master/Turing/palindrome.tm");
         printParser();
+
+        ArrayList<String> input = readInput("/Users/fengshiwei/001NJU/2018Fall/TheoryofComputation/Project-2018-master/Turing/palindrome.tm");
+//        for(String str : input){
+//            System.out.println(str);
+//        }
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter("result.txt", true);
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+        for(String str : input){
+            Tape tape = new Tape();
+            String result = tape.execute(str);
+            writer.write(result);
+        }
+        writer.close();
     }
 
     public static void initParser(String filename) {
@@ -140,5 +154,27 @@ public class Turing {
         }
 
 
+    }
+
+    public static ArrayList<String> readInput(String filename){
+        File file = new File(filename);
+        BufferedReader reader = null;
+        ArrayList<String> input = new ArrayList<>();
+        try{
+            reader = new BufferedReader(new FileReader(file));
+            String tempStr = null;
+            while((tempStr = reader.readLine()) != null){
+                String tmp = tempStr;
+                input.add(tmp);
+            }
+            reader.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        return input;
+    }
+
+    public static boolean isLegal(String str){
+        return true;
     }
 }
