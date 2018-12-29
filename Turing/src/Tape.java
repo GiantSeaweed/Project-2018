@@ -1,3 +1,5 @@
+import sun.swing.BeanInfoUtils;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,6 +55,9 @@ public class Tape {
         }
 
         System.out.println("Size : "+tapeList.size());
+//        for(Transition trans: Turing.transitions){
+//            trans.printTransition();
+//        }
 
         int step = 0;
         String curState = Turing.initState;
@@ -68,12 +73,12 @@ public class Tape {
                 }
             }
 
-
+            System.out.println("cur: " +curState +" curSymbol:"+curSymbol);
             Transition transRule = getTransRule(curState, curSymbol);
-            System.out.println(transRule == null);
+//            System.out.println(transRule == null);
             transRule.printTransition();
             /** write the symbol and change the state */
-            tapeList.get(headLocation).data = transRule.nextSymbol;
+            tapeList.get(headLocation).data = new String(transRule.nextSymbol);
             curState = transRule.nextState;
 
             /** change the headIndex */
@@ -85,7 +90,24 @@ public class Tape {
                 headRight();
                 headLocation++;
             }
-            System.out.println("hL:" + headLocation);
+
+            /** encounter the border */
+            if(headLocation == tapeList.size()){
+                TapeUnit unit = new TapeUnit();
+                unit.index = tapeList.get(tapeList.size()-1).index + 1;
+                unit.data = "_";
+                unit.head = "^";
+                tapeList.add(unit);
+            }else if(headLocation < 0){
+                TapeUnit unit = new TapeUnit();
+                unit.index = tapeList.get(0).index - 1;
+                unit.data = "_";
+                unit.head = "^";
+                tapeList.add(unit);
+            }
+            for(TapeUnit unit: tapeList)
+                System.out.print(unit.data);
+            System.out.println("\nhL:" + headLocation+"\n");
             tapeList.get(headLocation).head = "^";
 
             StringBuffer indexString = new StringBuffer("Index : ");
@@ -113,7 +135,7 @@ public class Tape {
             writer.write("---------------------------------------------\n");
 
             step++;
-            if(curState.equals("halt_accept")){
+            if(curState.equals("halt_accept") || curState.equals("halt_reject")){
                 break;
             }
         }
@@ -137,14 +159,21 @@ public class Tape {
         Transition result = null;
         for(Transition trans : Turing.transitions){
             if(trans.curState.equals(curState) && trans.curSymbol.equals(curSymbol)){
-                result = trans;
+                result = new Transition();
+                result.copy(trans);
             }
         }
 
         if(result == null){
             for(Transition trans : Turing.transitions){
                 if(trans.curState.equals(curState) && trans.curSymbol.equals("*")){
-                    result = trans;
+                    result = new Transition();
+                    result.copy(trans);
+                    if(trans.nextSymbol.equals("*")) {
+                        result.nextSymbol = curSymbol;
+                    }else{
+                        result.nextSymbol = trans.nextSymbol;
+                    }
                 }
             }
         }

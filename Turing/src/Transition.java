@@ -12,6 +12,12 @@ public class Transition {
 
     public void printTransition(){
         System.out.println("curState: "+ curState +", curSymbol:"+curSymbol+", nexState:"+nextState+", nextSymbol:"+nextSymbol+", direction:"+direction);
+    }
 
+    public void copy(Transition trans){
+        curState = trans.curState;
+        nextSymbol = trans.nextSymbol;
+        nextState = trans.nextState;
+        direction = trans.direction;
     }
 }
