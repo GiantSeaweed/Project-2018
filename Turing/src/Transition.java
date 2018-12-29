@@ -9,4 +9,9 @@ public class Transition {
     public String nextState;
     public String nextSymbol;
     public Direction direction = Direction.RIGHT;
+
+    public void printTransition(){
+        System.out.println("curState: "+ curState +", curSymbol:"+curSymbol+", nexState:"+nextState+", nextSymbol:"+nextSymbol+", direction:"+direction);
+
+    }
 }

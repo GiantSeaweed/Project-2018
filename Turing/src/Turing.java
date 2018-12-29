@@ -15,7 +15,7 @@ public class Turing {
         initParser("/Users/fengshiwei/001NJU/2018Fall/TheoryofComputation/Project-2018-master/Turing/palindrome.tm");
         printParser();
 
-        ArrayList<String> input = readInput("/Users/fengshiwei/001NJU/2018Fall/TheoryofComputation/Project-2018-master/Turing/palindrome.tm");
+        ArrayList<String> input = readInput("/Users/fengshiwei/001NJU/2018Fall/TheoryofComputation/Project-2018-master/Turing/input.txt");
 //        for(String str : input){
 //            System.out.println(str);
 //        }
@@ -26,9 +26,12 @@ public class Turing {
             e.printStackTrace();
         }
         for(String str : input){
-            Tape tape = new Tape();
-            String result = tape.execute(str);
-            writer.write(result);
+            if(str.length() > 0) {
+                Tape tape = new Tape();
+                System.out.println("Str: " + str);
+                String result = tape.execute(str);
+                writer.write(result);
+            }
         }
         writer.close();
     }
@@ -174,7 +177,7 @@ public class Turing {
         return input;
     }
 
-    public static boolean isLegal(String str){
-        return true;
-    }
+//    public static boolean isLegal(String str){
+//        return true;
+//    }
 }
