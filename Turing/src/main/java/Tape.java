@@ -67,7 +67,7 @@ public class Tape {
             index++;
         }
 
-        System.out.println("Size : "+tapeList.size());
+       // System.out.println("Size : "+tapeList.size());
 //        for(Transition trans: Turing.transitions){
 //            trans.printTransition();
 //        }
@@ -125,14 +125,14 @@ public class Tape {
                 }
             }
 
-            System.out.println("cur: " +curState +" curSymbol:"+curSymbol);
+//            System.out.println("cur: " +curState +" curSymbol:"+curSymbol);
             Transition transRule = getTransRule(curState, curSymbol);
 //            System.out.println(transRule == null);
             if(transRule == null){
                 break;
             }
 
-            transRule.printTransition();
+//            transRule.printTransition();
             /** write the symbol and change the state */
             tapeList.get(headLocation).data = new String(transRule.nextSymbol);
             curState = transRule.nextState;
@@ -163,9 +163,9 @@ public class Tape {
                 headLocation = 0;
 //                tapeList.get(headLocation).head = "^";
             }
-            for(TapeUnit unit: tapeList)
-                System.out.print(unit.data);
-            System.out.println("\nhL:" + headLocation+"\n");
+//            for(TapeUnit unit: tapeList)
+//                System.out.print(unit.data);
+//            System.out.println("\nhL:" + headLocation+"\n");
             tapeList.get(headLocation).head = "^";
 
             indexString = new StringBuffer("Index :");
@@ -272,6 +272,7 @@ public class Tape {
                         result.nextSymbol = curSymbol;
                     }else{
                         result.nextSymbol = trans.nextSymbol;
+                        break;
                     }
                 }
             }
