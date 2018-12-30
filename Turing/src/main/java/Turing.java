@@ -2,12 +2,12 @@ import java.io.*;
 import java.util.*;
 
 public class Turing {
-    private static Set<String> stateSet = new HashSet<>();
-    public static Set<String> inputSymbols = new HashSet<>();
-    public static Set<String> tapeSymbols  = new HashSet<>();
+    private static Set<String> stateSet = new HashSet<String>();
+    public static Set<String> inputSymbols = new HashSet<String>();
+    public static Set<String> tapeSymbols  = new HashSet<String>();
     public static String   initState;
     public static String   blankSymbol;
-    public static Set<String> finalSet = new HashSet<>();
+    public static Set<String> finalSet = new HashSet<String>();
     public static ArrayList<Transition> transitions = new ArrayList<Transition>();
 
 
@@ -162,7 +162,7 @@ public class Turing {
     public static ArrayList<String> readInput(String filename){
         File file = new File(filename);
         BufferedReader reader = null;
-        ArrayList<String> input = new ArrayList<>();
+        ArrayList<String> input = new ArrayList<String>();
         try{
             reader = new BufferedReader(new FileReader(file));
             String tempStr = null;
@@ -177,7 +177,4 @@ public class Turing {
         return input;
     }
 
-//    public static boolean isLegal(String str){
-//        return true;
-//    }
 }

@@ -17,7 +17,7 @@ public class Tape {
     public String execute(String str) throws IOException {
         FileWriter writer = null;
         try{
-            writer = new FileWriter("console.txt",false);
+            writer = new FileWriter("console.txt",true);
         }catch(IOException e){
             e.printStackTrace();
         }
@@ -33,7 +33,7 @@ public class Tape {
         writer.write("Input: "+ str+"\n");
         writer.write("==================== RUN ====================\n");
         /** Initialize the tape */
-        ArrayList<TapeUnit> tapeList = new ArrayList<>();
+        ArrayList<TapeUnit> tapeList = new ArrayList<TapeUnit>();
         int index=0;
         while(index < str.length()){
             TapeUnit tapeUnit = new TapeUnit();
@@ -61,9 +61,48 @@ public class Tape {
 
         int step = 0;
         String curState = Turing.initState;
-        String curSymbol = null;
+        String curSymbol = tapeList.get(0).data;
         headIndex = 0;          // related to the tape
         int headLocation = 0;   // mark the position; detect the border
+
+        /** print the initial state*/
+        StringBuffer indexString = new StringBuffer("Index : ");
+        StringBuffer tapeString  = new StringBuffer("Tape  : ");
+        StringBuffer headString  = new StringBuffer("Head  : ");
+//        /** should not print unnecessary Blank symbols */
+//        int begin = 0, end = 0;
+//        for(int i=0;i<tapeList.size();i++){
+//            if( !(tapeList.get(i).data.equals("_") && tapeList.get(i).head.equals(" ")) ) {
+//                begin = i;
+//                break;
+//            }
+//        }
+//        for(int i=0;i<tapeList.size();i++){
+//            if( !(tapeList.get(i).data.equals("_") && tapeList.get(i).head.equals(" ")) ) {
+//                end = i;
+//            }
+//        }
+        for(int i=0;i<tapeList.size();i++) {
+            indexString.append(tapeList.get(i).index + " ");
+            tapeString.append(tapeList.get(i).data + " ");
+            headString.append(tapeList.get(i).head + " ");
+
+            int temp = Math.abs(tapeList.get(i).index);
+            while (temp >= 10) {
+                tapeString.append(" ");
+                headString.append(" ");
+                temp = temp / 10;
+            }
+        }
+        writer.write("Step  : "+step + "\n");
+        writer.write(indexString.toString()+ "\n");
+        writer.write(tapeString.toString()+ "\n");
+        writer.write(headString.toString()+ "\n");
+        writer.write("State : "+ curState+"\n");
+        writer.write("---------------------------------------------\n");
+        step++;
+        /** end of printing the initial step */
+
         while(true){
             for(int i=0;i<tapeList.size();i++){
                 if(headIndex == tapeList.get(i).index){
@@ -103,27 +142,43 @@ public class Tape {
                 unit.index = tapeList.get(0).index - 1;
                 unit.data = "_";
                 unit.head = "^";
-                tapeList.add(unit);
+                tapeList.add(0,unit);
+                headLocation = 0;
+//                tapeList.get(headLocation).head = "^";
             }
             for(TapeUnit unit: tapeList)
                 System.out.print(unit.data);
             System.out.println("\nhL:" + headLocation+"\n");
             tapeList.get(headLocation).head = "^";
 
-            StringBuffer indexString = new StringBuffer("Index : ");
-            StringBuffer tapeString  = new StringBuffer("Tape  : ");
-            StringBuffer headString  = new StringBuffer("Head  : ");
+            indexString = new StringBuffer("Index : ");
+            tapeString  = new StringBuffer("Tape  : ");
+            headString  = new StringBuffer("Head  : ");
 
+            /** should not print unnecessary Blank symbols */
+            int begin = 0, end = 0;
             for(int i=0;i<tapeList.size();i++){
-                indexString.append(tapeList.get(i).index+ " ");
-                tapeString.append( tapeList.get(i).data + " ");
-                headString.append( tapeList.get(i).head + " ");
+                if( !(tapeList.get(i).data.equals("_") && tapeList.get(i).head.equals(" ")) ) {
+                    begin = i;
+                    break;
+                }
+            }
+            for(int i=0;i<tapeList.size();i++){
+                if( !(tapeList.get(i).data.equals("_") && tapeList.get(i).head.equals(" ")) ) {
+                    end = i;
+                }
+            }
+
+            for(int i=begin;i<=end;i++) {
+                indexString.append(Math.abs(tapeList.get(i).index) + " ");
+                tapeString.append(tapeList.get(i).data + " ");
+                headString.append(tapeList.get(i).head + " ");
 
                 int temp = Math.abs(tapeList.get(i).index);
-                while(temp >= 10){
+                while (temp >= 10) {
                     tapeString.append(" ");
                     headString.append(" ");
-                    temp = temp/10;
+                    temp = temp / 10;
                 }
             }
 
@@ -135,16 +190,19 @@ public class Tape {
             writer.write("---------------------------------------------\n");
 
             step++;
-            if(curState.equals("halt_accept") || curState.equals("halt_reject")){
-                break;
+            if(curState.equals("halt_accept")){
+                writer.write("Result: True\n");
+                writer.write("==================== END ====================\n");
+                writer.close();
+                return "True\n";
+            } else if(curState.equals("halt_reject")){
+                writer.write("Result: False\n");
+                writer.write("==================== END ====================\n");
+                writer.close();
+                return "False\n";
             }
         }
-
-
-
-
-        writer.close();
-        return "1234\n";
+        //writer.close();
     }
 
     public static boolean isLegal(String str){

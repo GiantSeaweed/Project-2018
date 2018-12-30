@@ -22,8 +22,23 @@
 ; the transition functions
 
 ; State 0: read the leftmost symbol
-0 0 _ r 1o
-0 1 _ r 1i
+; 0 0 _ r 1o
+; 0 1 _ r 1i
+0 * _ l u1
+u1 * _ l u2
+u2 * _ l u3
+u3 * _ l u4
+u4 * _ l u5
+u5 * _ l u6
+u6 * _ l u7
+u7 * _ l u8
+u8 * _ l u9
+u9 * _ l u10
+u10 * _ l u11
+u11 * _ l u12
+u12 * _ l u13
+u13 * 1 l 1o
+
 0 _ _ * accept     ; Empty input
 
 ; State 1o, 1i: find the rightmost symbol
