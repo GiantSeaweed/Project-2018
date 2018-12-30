@@ -12,7 +12,7 @@ public class Turing {
 
 
     public static void main(String[] args) throws IOException {
-        initParser("/Users/fengshiwei/001NJU/2018Fall/TheoryofComputation/Project-2018-master/Turing/palindrome.tm");
+        initParser("/Users/fengshiwei/001NJU/2018Fall/TheoryofComputation/Project-2018-master/Turing/test.tm");
         printParser();
 
         ArrayList<String> input = readInput("/Users/fengshiwei/001NJU/2018Fall/TheoryofComputation/Project-2018-master/Turing/input.txt");
@@ -26,12 +26,12 @@ public class Turing {
             e.printStackTrace();
         }
         for(String str : input){
-            if(str.length() > 0) {
+//            if(str.length() > 0) {
                 Tape tape = new Tape();
                 System.out.println("Str: " + str);
                 String result = tape.execute(str);
                 writer.write(result);
-            }
+//            }
         }
         writer.close();
     }

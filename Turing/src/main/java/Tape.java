@@ -24,7 +24,7 @@ public class Tape {
         if(!isLegal(str)) {
             writer.write("Input: " + str + "\n");
             writer.write("==================== ERR ====================\n");
-            writer.write("The input " + str + " is illegal\n");
+            writer.write("The input \"" + str + "\" is illegal\n");
             writer.write("==================== END ====================\n");
             writer.close();
             return "Error\n";
@@ -35,10 +35,23 @@ public class Tape {
         /** Initialize the tape */
         ArrayList<TapeUnit> tapeList = new ArrayList<TapeUnit>();
         int index=0;
+
+        if(str.length() == 0){
+            TapeUnit tapeUnit = new TapeUnit();
+            tapeUnit.index = 0;
+            tapeUnit.data = "_";
+            tapeUnit.head = "^";
+            tapeList.add(tapeUnit);
+        }
         while(index < str.length()){
             TapeUnit tapeUnit = new TapeUnit();
             tapeUnit.index = index;
-            tapeUnit.data  = str.substring(index, index+1);
+            tapeUnit.data = str.substring(index, index + 1);
+//            if(str.length() == 0){
+//                tapeUnit.data = "_";
+//            }else {
+//
+//            }
             if(index == 0) {
                 tapeUnit.head = "^";
             }else {
@@ -95,10 +108,10 @@ public class Tape {
             }
         }
         writer.write("Step  : "+step + "\n");
-        writer.write(indexString.toString()+ "\n");
-        writer.write(tapeString.toString()+ "\n");
-        writer.write(headString.toString()+ "\n");
-        writer.write("State : "+ curState+"\n");
+        writer.write(indexString.toString().trim()+ "\n");
+        writer.write(tapeString.toString().trim()+ "\n");
+        writer.write(headString.toString().trim()+ "\n");
+        writer.write("State : "+ curState.trim()+"\n");
         writer.write("---------------------------------------------\n");
         step++;
         /** end of printing the initial step */
@@ -115,6 +128,10 @@ public class Tape {
             System.out.println("cur: " +curState +" curSymbol:"+curSymbol);
             Transition transRule = getTransRule(curState, curSymbol);
 //            System.out.println(transRule == null);
+            if(transRule == null){
+                break;
+            }
+
             transRule.printTransition();
             /** write the symbol and change the state */
             tapeList.get(headLocation).data = new String(transRule.nextSymbol);
@@ -151,9 +168,9 @@ public class Tape {
             System.out.println("\nhL:" + headLocation+"\n");
             tapeList.get(headLocation).head = "^";
 
-            indexString = new StringBuffer("Index : ");
-            tapeString  = new StringBuffer("Tape  : ");
-            headString  = new StringBuffer("Head  : ");
+            indexString = new StringBuffer("Index :");
+            tapeString  = new StringBuffer("Tape  :");
+            headString  = new StringBuffer("Head  :");
 
             /** should not print unnecessary Blank symbols */
             int begin = 0, end = 0;
@@ -170,9 +187,9 @@ public class Tape {
             }
 
             for(int i=begin;i<=end;i++) {
-                indexString.append(Math.abs(tapeList.get(i).index) + " ");
-                tapeString.append(tapeList.get(i).data + " ");
-                headString.append(tapeList.get(i).head + " ");
+                indexString.append( " " + Math.abs(tapeList.get(i).index) );
+                tapeString.append(  " " + tapeList.get(i).data );
+                headString.append(  " " + tapeList.get(i).head );
 
                 int temp = Math.abs(tapeList.get(i).index);
                 while (temp >= 10) {
@@ -183,31 +200,55 @@ public class Tape {
             }
 
             writer.write("Step  : "+step + "\n");
-            writer.write(indexString.toString()+ "\n");
-            writer.write(tapeString.toString()+ "\n");
-            writer.write(headString.toString()+ "\n");
-            writer.write("State : "+ curState+"\n");
+            writer.write(indexString.toString().trim()+ "\n");
+            writer.write(tapeString.toString().trim()+ "\n");
+            writer.write(headString.toString().trim()+ "\n");
+            writer.write("State : "+ curState.trim()+"\n");
             writer.write("---------------------------------------------\n");
 
             step++;
-            if(curState.equals("halt_accept")){
-                writer.write("Result: True\n");
-                writer.write("==================== END ====================\n");
-                writer.close();
-                return "True\n";
-            } else if(curState.equals("halt_reject")){
-                writer.write("Result: False\n");
-                writer.write("==================== END ====================\n");
-                writer.close();
-                return "False\n";
+            if(Turing.finalSet.contains(curState)) {
+                break;
+            }
+//            if(curState.equals("halt_accept")){
+//                writer.write("Result: True\n");
+//                writer.write("==================== END ====================\n");
+//                writer.close();
+//                return "True\n";
+//            } else if(curState.equals("halt_reject")){
+//                writer.write("Result: False\n");
+//                writer.write("==================== END ====================\n");
+//                writer.close();
+//                return "False\n";
+
+        }
+
+        int begin = 0, end = 0;
+        for(int i=0;i<tapeList.size();i++){
+            if( !(tapeList.get(i).data.equals("_")) ){
+                begin = i;
+                break;
             }
         }
-        //writer.close();
+        for(int i=0;i<tapeList.size();i++){
+            if( !(tapeList.get(i).data.equals("_")) ) {
+                end = i;
+            }
+        }
+        StringBuffer buffer = new StringBuffer();
+        for(int i =begin;i<=end;i++){
+            buffer.append(tapeList.get(i).data);
+        }
+        writer.write("Result: "+buffer.toString().trim()+"\n");
+        writer.write("==================== END ====================\n");
+        writer.close();
+
+        return buffer.toString()+"\n";
     }
 
     public static boolean isLegal(String str){
         for(int i=0;i<str.length();i++){
-            if(!Turing.tapeSymbols.contains(str.substring(i,i+1)))
+            if(!Turing.inputSymbols.contains(str.substring(i,i+1)))
                 return false;
         }
         return true;
