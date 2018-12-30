@@ -1,4 +1,3 @@
-import sun.swing.BeanInfoUtils;
 
 import java.io.File;
 import java.io.FileWriter;

@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Turing" />
+        <module name="TuringMachine" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Turing" target="1.8" />
+      <module name="TuringMachine" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

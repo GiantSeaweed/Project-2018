@@ -21,6 +21,9 @@
 
 ;the list of transition functions
 ;curState curSymbol nextSymbol nextDirection nextState
+
+;q1 q2 q3 q4 are used to find the mid-point of the input string
+;a/b move from left to right; X/Y move from right to left
 q1 a X r q2
 q1 b Y r q2
 q1 X X l q5
@@ -44,6 +47,10 @@ q4 b b l q4
 q4 X a r q1
 q4 Y b r q1
 q4 * * r error
+
+; after finding the mid-point, I need to check whether the former half equals the latter half
+; q5 q6 q7  mean that the TuringMachine is checking 'a'
+; q8 q9 q10 mean that the TuringMachine is checking 'b' (it's like a kind of storage)
 
 q5 a a l q5
 q5 b b l q5
@@ -78,6 +85,7 @@ q11 b Y l q8
 q11 _ _ l accept
 q11 * * r error
 
+;finally I move rightmost and leftmost to clear the tape and print the result
 accept * _ l accept
 accept _ T r accept1
 accept1 _ r r accept2

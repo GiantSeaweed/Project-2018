@@ -1,7 +1,8 @@
 import java.io.*;
 import java.util.*;
+import static java.lang.System.exit;
 
-public class Turing {
+public class Main {
     private static Set<String> stateSet = new HashSet<String>();
     public static Set<String> inputSymbols = new HashSet<String>();
     public static Set<String> tapeSymbols  = new HashSet<String>();
@@ -12,26 +13,28 @@ public class Turing {
 
 
     public static void main(String[] args) throws IOException {
-        initParser("/Users/fengshiwei/001NJU/2018Fall/TheoryofComputation/Project-2018-master/Turing/test.tm");
+        if(args.length == 0){
+            System.err.println("Please choose a directory!");
+            exit(-1);
+        }
+
+        initParser(args[0] + File.separator+"test.tm");
 //        printParser();
 
-        ArrayList<String> input = readInput("/Users/fengshiwei/001NJU/2018Fall/TheoryofComputation/Project-2018-master/Turing/input.txt");
+        ArrayList<String> input = readInput(args[0]+File.separator+"input.txt");
 //        for(String str : input){
 //            System.out.println(str);
 //        }
         FileWriter writer = null;
         try {
-            writer = new FileWriter("result.txt", true);
+            writer = new FileWriter(args[0]+File.separator+"result.txt", true);
         } catch(IOException e){
             e.printStackTrace();
         }
         for(String str : input){
-//            if(str.length() > 0) {
                 Tape tape = new Tape();
-//                System.out.println("Str: " + str);
-                String result = tape.execute(str);
+                String result = tape.execute(str,args[0]);
                 writer.write(result);
-//            }
         }
         writer.close();
     }
